@@ -3,16 +3,16 @@ const bodyParser = require('body-parser');
 const mysql = require('mysql');
 
 const app = express();
-const port = 3000;
+const port = 3306;
 
 app.use(bodyParser.json());
 
 // Configuration de la connexion à la base de données MySQL
 const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'votre_utilisateur_mysql',
-  password: 'votre_mot_de_passe_mysql',
-  database: 'votre_base_de_donnees_mysql'
+  host: '172.17.0.2',
+  user: 'test123',
+  password: 'testing123',
+  database: 'A_rosa_je'
 });
 
 // Connexion à la base de données MySQL
@@ -109,12 +109,12 @@ app.post('/login', (req, res) => {
     
 // Endpoint pour ajouter une photo (push une nouvelle photo)
 app.post('/photo', (req, res) => {
-  const { id_person, nom_plante, date_debut, date_fin, description, url_photo } = req.body;
+  const { id_user, nom_plante, date_debut, date_fin, description, url_photo } = req.body;
 
-  if (id_person && nom_plante && date_debut && date_fin && description && url_photo) {
+  if (id_user && nom_plante && date_debut && date_fin && description && url_photo) {
     // Insérer la photo dans la base de données
-    db.query('INSERT INTO photos (id_person, nom_plante, date_debut, date_fin, description, url_photo) VALUES (?, ?, ?, ?, ?, ?)',
-      [id_person, nom_plante, date_debut, date_fin, description, url_photo],
+    db.query('INSERT INTO photos (id_user, nom_plante, date_debut, date_fin, description, url_photo) VALUES (?, ?, ?, ?, ?, ?)',
+      [id_user, nom_plante, date_debut, date_fin, description, url_photo],
       (err, result) => {
         if (err) {
           return res.status(500).json({ error: 'Erreur lors de l\'ajout de la photo dans la base de données.' });
@@ -146,12 +146,12 @@ app.get('/all-plants', (req, res) => {
 
 // Endpoint pour ajouter un conseil (push un nouveau conseil)
 app.post('/conseil', (req, res) => {
-  const { id_person, nom_plante, conseil } = req.body;
+  const { id_user, nom_plante, conseil } = req.body;
 
-  if (id_person && nom_plante && conseil) {
+  if (id_user && nom_plante && conseil) {
     // Insérer le conseil dans la base de données
-    db.query('INSERT INTO conseils (id_person, nom_plante, conseil) VALUES (?, ?, ?)',
-      [id_person, nom_plante, conseil],
+    db.query('INSERT INTO conseils (id_user, nom_plante, conseil) VALUES (?, ?, ?)',
+      [id_user, nom_plante, conseil],
       (err, result) => {
         if (err) {
           return res.status(500).json({ error: 'Erreur lors de l\'ajout du conseil dans la base de données.' });
@@ -182,12 +182,12 @@ app.get('/all-conseils', (req, res) => {
 });
 
 // Endpoint pour récupérer les plantes d'un utilisateur
-app.get('/user-plants/:id_person', (req, res) => {
-  const id_person = req.params.id_person;
+app.get('/user-plants/:id_user', (req, res) => {
+  const id_user = req.params.id_user;
 
-  if (id_person) {
+  if (id_user) {
     // Récupérer les plantes de l'utilisateur depuis la base de données à partir de son id
-    db.query('SELECT * FROM photos WHERE id_person = ?', [id_person], (err, rows) => {
+    db.query('SELECT * FROM photos WHERE id_user = ?', [id_user], (err, rows) => {
       if (err) {
         return res.status(500).json({ error: 'Erreur lors de la récupération des plantes de l\'utilisateur depuis la base de données.' });
       }
