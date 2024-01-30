@@ -77,10 +77,9 @@ app.get('/users', (req, res) => {
       return res.status(500).json({ error: 'Erreur lors de la récupération des utilisateurs depuis la base de données.' });
     }
   // Réponse à l'application cliente avec la liste des utilisateurs et le statut 200 (OK)
-  res.status(200).json({ users, status: 200, message: 'Liste des utilisateurs récupérée avec succès.' });
+  res.status(200).json(rows);
   })
 });
-
 
 // Endpoint pour se connecter (push un nouvel utilisateur et renvoie un token et un ID)
 app.post('/login', (req, res) => {
@@ -143,6 +142,7 @@ app.get('/all-plants', (req, res) => {
     res.status(200).json(rows);
   });
 });
+
 
 // Endpoint pour ajouter un conseil (push un nouveau conseil)
 app.post('/conseil', (req, res) => {
